@@ -27,13 +27,15 @@ connectDB()
 app.use("/api/auth", authRouter);
 app.use("/api/messages", messageRouter)
 
-if(process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")))
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  app.get("/:path(*)", (req, res)=>{
+  // ✅ fallback for SPA (React)
+  app.use((req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  })
+  });
 }
+
 
 server.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
